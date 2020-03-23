@@ -125,6 +125,7 @@ int main() {
         std::cout << "k+1:\n"<<K_plus << std::endl;
 
     }
+    std::cout << "\nVector x(in " << iteration << " iteration) is:\n" << K_plus << "\ndifference(in normal):\n" << norm_inf(K_plus, K);
     return 0;
 }
 
