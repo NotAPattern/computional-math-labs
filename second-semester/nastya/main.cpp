@@ -19,6 +19,21 @@
 -10.3
 -22.1
  */
+
+/*
+4
+1
+-1
+0
+1
+-5
+1
+1
+1
+-1
+4
+0
+ */
 // Normalization ||x||(infinity) = max(|xi|) by i
 double norm_inf(Matrix vector_plus, Matrix vector);
 
@@ -118,7 +133,7 @@ double norm_inf(Matrix vector_plus, Matrix vector){
     Matrix difference(N,1);
     // Find x^(k+1) - x^(k) (k-s iteration)
     for(int i = 0; i < N; i++){
-        difference(i,0) = vector_plus(i, 0) - vector(i, 0);
+        difference(i,0) = std::abs(vector_plus(i, 0)) - std::abs(vector(i, 0));
     }
     std::cout << "difference:\n" << difference;
 
