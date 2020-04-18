@@ -3,8 +3,36 @@
 #include "matrix-master/dist/matrix.cpp"
 #include <cmath>
 //Demention of matrix
-#define N 3
+#define N 4
 //Sample matrix 3x3
+/*
+4x4:
+0.68
+0.05
+-0.11
+0.08
+2.15
+-0.11
+0.84
+0.28
+0.06
+-0.83
+-0.08
+0.15
+1
+-0.12
+1.16
+0.21
+-0.13
+0.27
+1
+0.44
+-----------------------
+Answer: x1= 3.57144
+x2= -0.957051
+x3= 1.48894
+x4= -0.836499
+*/
 /*
 9.2
 2.5
@@ -18,6 +46,20 @@
 -1.6
 -10.3
 -22.1
+ */
+/*
+10
+1
+-1
+11
+1
+10
+-1
+10
+-1
+1
+10
+10
  */
 // Normalization ||x||(infinity) = max(|xi|) by i
 double norm_inf(Matrix vector_plus, Matrix vector);
@@ -52,9 +94,13 @@ int main() {
     std::cin >> tetta;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N + 1; j++) {
-            A_k_iter(i, j) = (A(i, j) / A(i, i)) * tetta;
+            if(j == N) {
+                A_k_iter(i, j) = ((A(i, j)) / A(i, i)) * tetta;
+            } else {
+                A_k_iter(i, j) = ((-A(i, j)) / A(i, i)) * tetta;
+            }
             if (i == j) {
-                A_k_iter(i, j) = 1 - tetta;
+                A_k_iter(i, j) = (1 - tetta) * (A(i, j) / A(i, i));
             }
         }
     }
@@ -81,12 +127,16 @@ int main() {
     //first iteration
     for(int l = 0; l < N; l++){
         for(int m = 0; m < N; m++) {
-            K_plus(l, 0) -= (A_k_iter(l, m) * K(m, 0));
+            K_plus(l, 0) += (A_k_iter(l, m) * K(m, 0));
         }
         K_plus(l, 0) += A_k_iter(l, N);
     }
 
     std::cout << A_k_iter;
+    std::cout << "===================================\n";
+    std::cout << "N = " << iteration << std::endl;
+    std::cout << "k:\n" << K << std::endl;
+    std::cout << "k+1:\n"<<K_plus << std::endl;
 
     // while ||x^(K+1) - x^(k)||(inf) > epsilon do:
     while(norm_inf(K_plus, K) > epsilon){
@@ -99,7 +149,7 @@ int main() {
         // Iterate
         for(int l = 0; l < N; l++){
             for(int m = 0; m < N; m++) {
-                K_plus(l, 0) -= (A_k_iter(l, m) * K(m, 0));
+                K_plus(l, 0) += (A_k_iter(l, m) * K(m, 0));
             }
             K_plus(l, 0) += A_k_iter(l, N);
         }
