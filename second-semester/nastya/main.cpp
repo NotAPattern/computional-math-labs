@@ -47,20 +47,6 @@ x4= -0.836499
 -10.3
 -22.1
  */
-/*
-10
-1
--1
-11
-1
-10
--1
-10
--1
-1
-10
-10
- */
 // Normalization ||x||(infinity) = max(|xi|) by i
 double norm_inf(Matrix vector_plus, Matrix vector);
 
@@ -160,6 +146,7 @@ int main() {
         std::cout << "k+1:\n"<<K_plus << std::endl;
 
     }
+    std::cout << "\nVector x(in " << iteration << " iteration) is:\n" << K_plus << "\ndifference(in normal):\n" << norm_inf(K_plus, K);
     return 0;
 }
 
@@ -168,7 +155,7 @@ double norm_inf(Matrix vector_plus, Matrix vector){
     Matrix difference(N,1);
     // Find x^(k+1) - x^(k) (k-s iteration)
     for(int i = 0; i < N; i++){
-        difference(i,0) = vector_plus(i, 0) - vector(i, 0);
+        difference(i,0) = std::abs(vector_plus(i, 0)) - std::abs(vector(i, 0));
     }
     std::cout << "difference:\n" << difference;
 
