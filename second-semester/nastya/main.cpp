@@ -47,8 +47,13 @@ x4= -0.836499
 -10.3
 -22.1
  */
+// Instert matrix
+void insert_matrix(Matrix A);
+// Fill up matrix
+void fill_up_matrix(Matrix A);
 // Normalization ||x||(infinity) = max(|xi|) by i
 double norm_inf(Matrix vector_plus, Matrix vector);
+
 
 int main() {
     //Source matrix
@@ -67,13 +72,8 @@ int main() {
     double epsilon;
     //Number of iteration
     int iteration = 0;
-    //A size is 4x5(5 is vector b)
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N + 1; j++) {
-            std::cout << "A[" << i + 1 << "][" << j + 1 << "]: ";
-            std::cin >> A(i, j);
-        }
-    }
+
+    insert_matrix(A);
 
     //Input tetta and initialization iteration matrix
     std::cout << "Input tetta(iter parametr): ";
@@ -148,6 +148,15 @@ int main() {
     }
     std::cout << "\nVector x(in " << iteration << " iteration) is:\n" << K_plus << "\ndifference(in normal):\n" << norm_inf(K_plus, K);
     return 0;
+}
+
+void insert_matrix(Matrix A){
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N + 1; j++) {
+            std::cout << "A[" << i + 1 << "][" << j + 1 << "]: ";
+            std::cin >> A(i, j);
+        }
+    }
 }
 
 double norm_inf(Matrix vector_plus, Matrix vector){

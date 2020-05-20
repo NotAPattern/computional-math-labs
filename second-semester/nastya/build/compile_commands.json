@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/main/git/computional-math-labs/second-semester/nastya/build",
+  "command": "/usr/bin/g++-7    -g   -std=gnu++14 -o CMakeFiles/nastya.dir/main.cpp.o -c /home/main/git/computional-math-labs/second-semester/nastya/main.cpp",
+  "file": "/home/main/git/computional-math-labs/second-semester/nastya/main.cpp"
+}
+]
