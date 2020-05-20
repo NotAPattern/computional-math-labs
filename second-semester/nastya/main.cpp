@@ -2,6 +2,11 @@
 #include "matrix-master/dist/matrix.h"
 #include "matrix-master/dist/matrix.cpp"
 #include <cmath>
+#include <sys/time.h>
+#include <time.h>
+
+#define NS_IN_S  1E9
+
 //Demention of matrix
 #define N 4
 //Sample matrix 3x3
@@ -27,6 +32,27 @@
 0.27
 1
 0.44
+ ---------------------
+10
+-1
+2
+0
+6
+-1
+11
+-1
+3
+25
+2
+-1
+10
+-1
+-11
+0
+3
+-1
+8
+15
 -----------------------
 Answer: x1= 3.57144
 x2= -0.957051
@@ -48,123 +74,229 @@ x4= -0.836499
 -22.1
  */
 // Normalization ||x||(infinity) = max(|xi|) by i
+struct timespec start, stop, duration;
 double norm_inf(Matrix vector_plus, Matrix vector);
 
 int main() {
-    //Source matrix
+
+//Source matrix
+
     Matrix A(N, N + 1);
-    //Matrix for iteration x(i) = b - x1 - x2 - ... - x(i-1) - x(i+1) - ... - x(n)
+
+//Matrix for iteration x(i) = b - x1 - x2 - ... - x(i-1) - x(i+1) - ... - x(n)
+
     Matrix A_k_iter(N, N + 1);
-    // K-s iteration
+
+// K-s iteration
+
     Matrix K(N, 1);
-    // K+1-s iteration
+
+// K+1-s iteration
+
     Matrix K_plus(N, 1);
-    //Iteration parametr
+
+//Iteration parametr
+
     double tetta = 1.4;
-    // zero or one vectors when K=0
+
+// zero or one vectors when K=0
+
     bool init;
-    //epsilon :)
+
+//epsilon :)
+
     double epsilon;
-    //Number of iteration
+
+//Number of iteration
+
     int iteration = 0;
-    //A size is 4x5(5 is vector b)
+
+//A size is 4x5(5 is vector b)
+
     for (int i = 0; i < N; i++) {
+
         for (int j = 0; j < N + 1; j++) {
+
             std::cout << "A[" << i + 1 << "][" << j + 1 << "]: ";
+
             std::cin >> A(i, j);
+
         }
+
     }
 
-    //Input tetta and initialization iteration matrix
+//Input tetta and initialization iteration matrix
+
     std::cout << "Input tetta(iter parametr): ";
+
     std::cin >> tetta;
+
     for (int i = 0; i < N; i++) {
+
         for (int j = 0; j < N + 1; j++) {
+
             if(j == N) {
                 A_k_iter(i, j) = ((A(i, j)) / A(i, i)) * tetta;
             } else {
-                A_k_iter(i, j) = ((-A(i, j)) / A(i, i)) * tetta;
+
+                A_k_iter(i, j) = ((-1)*(A(i, j) / A(i, i))) * tetta;
             }
+
             if (i == j) {
+
                 A_k_iter(i, j) = (1 - tetta) * (A(i, j) / A(i, i));
+
             }
+
         }
+
     }
 
-    //Input epsilon
+//Input epsilon
+
     std::cout << "Input Epsilon: ";
+
     std::cin >> epsilon;
 
-    // K=0 vectors
+// K=0 vectors
+
     std::cout << "Input initial approximation(1 if (1,1,...,1), 0 if (0,0,...,0)): ";
+
     std::cin >> init;
+
     if (init == 0) {
+
         for (int i = 0; i < N; i++) {
+
             K(i, 0) = 0;
+
             K_plus(i, 0) = 0;
+
         }
+
     } else {
+
         for (int i = 0; i < N; i++) {
+
             K(i, 0) = 1;
+
             K_plus(i, 0) = 0;
+
         }
     }
 
-    //first iteration
+//first iteration
+
     for(int l = 0; l < N; l++){
+
         for(int m = 0; m < N; m++) {
+
             K_plus(l, 0) += (A_k_iter(l, m) * K(m, 0));
+
         }
+
         K_plus(l, 0) += A_k_iter(l, N);
+
     }
 
     std::cout << A_k_iter;
+
     std::cout << "===================================\n";
+
     std::cout << "N = " << iteration << std::endl;
+
     std::cout << "k:\n" << K << std::endl;
+
     std::cout << "k+1:\n"<<K_plus << std::endl;
 
-    // while ||x^(K+1) - x^(k)||(inf) > epsilon do:
+// while ||x^(K+1) - x^(k)||(inf) > epsilon do:
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
     while(norm_inf(K_plus, K) > epsilon){
-        // last iteration now iteration
+
+// last iteration now iteration
+
         K = K_plus;
-        //clear K_plus
+
+//clear K_plus
+
         for(int i = 0; i < N; i++){
+
             K_plus(i, 0) = 0;
+
         }
-        // Iterate
+
+// Iterate
+
         for(int l = 0; l < N; l++){
+
             for(int m = 0; m < N; m++) {
+
                 K_plus(l, 0) += (A_k_iter(l, m) * K(m, 0));
+
             }
+
             K_plus(l, 0) += A_k_iter(l, N);
+
         }
+
         iteration++;
+
         std::cout << "===================================\n";
+
         std::cout << "N = " << iteration << std::endl;
+
         std::cout << "k:\n" << K << std::endl;
+
         std::cout << "k+1:\n"<<K_plus << std::endl;
 
     }
-    std::cout << "\nVector x(in " << iteration << " iteration) is:\n" << K_plus << "\ndifference(in normal):\n" << norm_inf(K_plus, K);
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &stop);
+    if ((stop.tv_nsec - start.tv_nsec) < 0)
+    {
+        duration.tv_sec = stop.tv_sec - start.tv_sec - 1;
+        duration.tv_nsec = NS_IN_S + stop.tv_nsec - start.tv_nsec;
+    }
+    else
+    {
+        duration.tv_sec = stop.tv_sec - start.tv_sec;
+        duration.tv_nsec = stop.tv_nsec - start.tv_nsec;
+    }
+    double result = duration.tv_sec + duration.tv_nsec / NS_IN_S;
+    std::cout << "TIME: " << result;
     return 0;
+
 }
 
 double norm_inf(Matrix vector_plus, Matrix vector){
+
     double max = 0;
+
     Matrix difference(N,1);
-    // Find x^(k+1) - x^(k) (k-s iteration)
+
+// Find x^(k+1) - x^(k) (k-s iteration)
+
     for(int i = 0; i < N; i++){
-        difference(i,0) = std::abs(vector_plus(i, 0)) - std::abs(vector(i, 0));
+
+        difference(i,0) = vector_plus(i, 0) - vector(i, 0);
+
     }
+
     std::cout << "difference:\n" << difference;
 
-    //find max element of normal
+//find max element of normal
+
     max = std::abs(difference(0,0));
+
     for(int i = 0; i < N; i++){
+
         if(max < std::abs(difference(i, 0))){
+
             max = std::abs(difference(i, 0));
+
         }
+
     }
+
     return max;
+
 }
