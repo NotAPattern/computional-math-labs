@@ -36,9 +36,8 @@ x4=
 */
 
 // Instert matrix
-void insert_matrix(Matrix, Matrix, Matrix);
-// Fill up matrix
-void fill_up_matrix(Matrix A);
+void insert_matrix(Matrix& A, Matrix& A_t, Matrix& B, Matrix& X);
+
 // Normalization ||x||(infinity) = max(|xi|) by i
 double norm_inf(Matrix vector_plus, Matrix vector);
 
@@ -73,7 +72,7 @@ int main() {
     int iteration = 0;
 
     // Insert matrix
-    insert_matrix(A, A_t, B);
+    insert_matrix(A, A_t, B, X);
 
 //    for (int i = 0; i < N; i++) {
 //        for (int j = 0; j < N + 1; j++) {
@@ -101,15 +100,17 @@ int main() {
     }
 
     //first iteration
-    R = (A * X) - B;
-    Ar = A_t*R;
-    AAr = A*A_t*R;
+    //B = B.transpose();
+    R = B - (A*X);
+    // R -= B;
+    Ar = A*R;
+    // AAr = A*A_t*R;
     for(int i = 0; i < N; i++){
-        alpha_numerator += R(i, 0)*AAr(i,0);
-        alpha_denominator += pow(AAr(i, 0), 2);
+        alpha_numerator += R(i,0)*R(i,0);
+        alpha_denominator += Ar(i,0)*R(i, 0);
     }
-    alpha = 0.5*(alpha_numerator/alpha_denominator);
-    X_next = X - alpha*Ar;
+    alpha = alpha_numerator/alpha_denominator;
+    X_next = X + alpha*R;
 
 //    for(int l = 0; l < N; l++){
 //        for(int m = 0; m < N; m++) {
@@ -122,6 +123,14 @@ int main() {
     std::cout << A;
     std::cout << "Basic vector B:" << std::endl;
     std::cout << B;
+    std::cout << "Basic vector R:" << std::endl;
+    std::cout << R;
+    std::cout << "Basic vector Ar:" << std::endl;
+    std::cout << Ar;
+    std::cout << "Basic vector AAr:" << std::endl;
+    std::cout << AAr;
+    std::cout << "Alpha:" << std::endl;
+    std::cout << alpha;
     std::cout << "===================================\n";
     std::cout << "N = " << iteration << std::endl;
     std::cout << "X(0):\n" << X << std::endl;
@@ -130,13 +139,16 @@ int main() {
     // while ||x^(K+1) - x^(k)||(inf) > epsilon do:
     while(norm_inf(X_next, X) > epsilon){
         X = X_next;
-        R = (A * X) - B;
+        R = B - (A*X);
+        // R -= B;
         Ar = A*R;
-        AAr = A*A_t*R;
+        // AAr = A*A_t*R;
         for(int i = 0; i < N; i++){
-            alpha_numerator += (R(i, 0)*AAr(i,0));
-            alpha_denominator += pow(AAr(i, 0), 2);
+            alpha_numerator += R(i,0)*R(i,0);
+            alpha_denominator += Ar(i,0)*R(i, 0);
         }
+        alpha = alpha_numerator/alpha_denominator;
+        X_next = X + alpha*R;
         alpha = 0.5*(alpha_numerator/alpha_denominator);
         iteration++;
         std::cout << "===================================\n";
@@ -148,7 +160,7 @@ int main() {
     return 0;
 }
 
-void insert_matrix(Matrix A, Matrix A_t, Matrix B){
+void insert_matrix(Matrix& A, Matrix& A_t, Matrix& B, Matrix& X){
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             std::cout << "A[" << i + 1 << "][" << j + 1 << "]: ";
@@ -156,9 +168,17 @@ void insert_matrix(Matrix A, Matrix A_t, Matrix B){
         }
     }
     for(int i = 0; i < N; i++){
-        std::cout << "B[" << i << "]: ";
+        std::cout << "B[" << i + 1 << "]: ";
         std::cin >> B(i,0);
     }
+//    for(int i = 0; i < N; i++){
+//        std::cout << "X[" << i + 1 << "]: ";
+//        std::cin >> X(i,0);
+//    }
+    //X(0,0) = 0.3;
+    //X(1,0) = -0.05;
+    //X(2,0) = -0.2;
+    //X(3, 0) = 0.3;
     A_t = A.transpose();
 }
 

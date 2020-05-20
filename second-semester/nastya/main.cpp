@@ -113,7 +113,6 @@ int main() {
 //Number of iteration
 
     int iteration = 0;
-==== BASE ====
     //A size is 4x5(5 is vector b)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N + 1; j++) {
@@ -121,7 +120,6 @@ int main() {
             std::cin >> A(i, j);
         }
     }
-==== BASE ====
 
 //Input tetta and initialization iteration matrix
 

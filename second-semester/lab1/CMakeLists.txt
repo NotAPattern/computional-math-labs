@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(lab1)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 set(PROJECT_HEADERS_DIR ${PROJECT_SOURCE_DIR}/matrix-master/dist/includes)
 set(PROJECT_SRC_DIR ${PROJECT_SOURCE_DIR}/matrix-master/dist/src)
