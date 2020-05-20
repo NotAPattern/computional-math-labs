@@ -1,0 +1,3 @@
+/home/main/git/computional-math-labs/second-semester/nastya/build/CMakeFiles/rebuild_cache.dir
+/home/main/git/computional-math-labs/second-semester/nastya/build/CMakeFiles/nastya.dir
+/home/main/git/computional-math-labs/second-semester/nastya/build/CMakeFiles/edit_cache.dir

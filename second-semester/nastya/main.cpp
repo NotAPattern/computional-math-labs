@@ -73,14 +73,17 @@ x4= -0.836499
 -10.3
 -22.1
  */
+// Instert matrix
+void insert_matrix(Matrix A);
+// Fill up matrix
+void fill_up_matrix(Matrix A);
 // Normalization ||x||(infinity) = max(|xi|) by i
 struct timespec start, stop, duration;
 double norm_inf(Matrix vector_plus, Matrix vector);
 
+
 int main() {
-
-//Source matrix
-
+    //Source matrix
     Matrix A(N, N + 1);
 
 //Matrix for iteration x(i) = b - x1 - x2 - ... - x(i-1) - x(i+1) - ... - x(n)
@@ -110,20 +113,15 @@ int main() {
 //Number of iteration
 
     int iteration = 0;
-
-//A size is 4x5(5 is vector b)
-
+==== BASE ====
+    //A size is 4x5(5 is vector b)
     for (int i = 0; i < N; i++) {
-
         for (int j = 0; j < N + 1; j++) {
-
             std::cout << "A[" << i + 1 << "][" << j + 1 << "]: ";
-
             std::cin >> A(i, j);
-
         }
-
     }
+==== BASE ====
 
 //Input tetta and initialization iteration matrix
 
@@ -265,6 +263,15 @@ int main() {
     std::cout << "TIME: " << result;
     return 0;
 
+}
+
+void insert_matrix(Matrix A){
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N + 1; j++) {
+            std::cout << "A[" << i + 1 << "][" << j + 1 << "]: ";
+            std::cin >> A(i, j);
+        }
+    }
 }
 
 double norm_inf(Matrix vector_plus, Matrix vector){
