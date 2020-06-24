@@ -112,6 +112,7 @@ void insertData(double& a, double& b, double& t, int& n){
 void fillData(double& a, double& t, double& h, double* X, double* Y, int& n) {
     h = 2 / (double) n;
     X[0] = a;
+    // Y[0] = 1/(1.01 + pow(t,2));
     Y[0] = 1 / (0.01 + pow((h*t-1), 2));
 }
 
