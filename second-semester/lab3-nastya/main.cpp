@@ -15,20 +15,21 @@ int main() {
     struct timespec start, stop, duration;
     int n;
     double a, b, h, t;
-    cout << "Input a: ";
+    cout << "Введите a: ";
     cin >> a;
-    cout << "Input b: ";
+    cout << "Введите b: ";
     cin >> b;
-    cout << "Input t: ";
+    cout << "Ввдеите t: ";
     cin >> t;
-    cout << "Input n: ";
+    cout << "Введите n: ";
     cin >> n;
     double X[(int) n];
     double Y1[(int) n];
     double Y[(int) n];
     h = 2 / (double) n;
     X[0] = a;
-    Y[0] = 1 /(1.01 + pow(t, 2));
+    Y[0] = 1 / (0.01 + pow((h*t-1), 2));
+    //Y[0] = 1 /(1.01 + pow(t, 2));
     // Вычисление
     for (int i = 1; i <= n; i++) {
         X[i] = (double) (a + i * h);
